@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { useRouter, useParams } from 'next/navigation';
 import { NewChatModal } from '@/components/chat/new-chat-modal';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -62,15 +63,22 @@ function ChatListItem({
   };
 
   return (
-    <div className="relative group w-full flex items-center">
+    <motion.div 
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      className="relative group w-full flex items-center"
+    >
       <Link
         href={`/chat/${chat.id}`}
         onClick={() => onCloseMobile()}
         className={cn(
-          "flex-1 min-w-0 flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors text-left overflow-hidden pr-16",
+          "flex-1 min-w-0 flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-300 text-left overflow-hidden pr-16",
           currentChatId === chat.id 
-            ? "bg-primary/10 text-primary font-medium" 
-            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            ? "bg-primary/10 text-primary font-medium shadow-sm backdrop-blur-md border border-primary/20" 
+            : "text-muted-foreground hover:bg-muted/80 hover:backdrop-blur-sm hover:text-foreground border border-transparent"
         )}
       >
         <MessageSquare className={cn(
@@ -115,19 +123,19 @@ function ChatListItem({
           <>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsEditing(true); }} 
-              className="p-1.5 rounded-md hover:bg-background/80 text-muted-foreground hover:text-foreground"
+              className="p-1.5 rounded-md hover:bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground"
             >
               <Edit2 className="h-3.5 w-3.5" />
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onTogglePin(chat.id, !!chat.isPinned); }} 
-              className="p-1.5 rounded-md hover:bg-background/80 text-muted-foreground hover:text-foreground"
+              className="p-1.5 rounded-md hover:bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground"
             >
               {chat.isPinned ? <PinOff className="h-3.5 w-3.5" /> : <Pin className="h-3.5 w-3.5" />}
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowDeleteDialog(true); }} 
-              className="p-1.5 rounded-md hover:bg-red-500/10 text-muted-foreground hover:text-red-500"
+              className="p-1.5 rounded-md hover:bg-red-500/10 backdrop-blur-sm text-muted-foreground hover:text-red-500"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -157,7 +165,7 @@ function ChatListItem({
           </>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -241,45 +249,49 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         ) : (
           <div className="space-y-4">
             {pinnedChats.length > 0 && (
-              <div>
+              <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <h3 className="text-[11px] font-normal text-muted-foreground uppercase tracking-wider mb-2 px-3 mt-2 flex items-center gap-1.5">
                   <Pin className="h-3 w-3" /> Pinned
                 </h3>
-                <div className="space-y-1">
-                  {pinnedChats.map((chat) => (
-                    <ChatListItem 
-                      key={chat.id} 
-                      chat={chat} 
-                      currentChatId={currentChatId} 
-                      onCloseMobile={() => setIsMobileOpen(false)}
-                      onTogglePin={handleTogglePin}
-                      onRename={handleRename}
-                      onDelete={handleChatDelete}
-                    />
-                  ))}
-                </div>
-              </div>
+                <motion.div layout className="space-y-1">
+                  <AnimatePresence>
+                    {pinnedChats.map((chat) => (
+                      <ChatListItem 
+                        key={chat.id} 
+                        chat={chat} 
+                        currentChatId={currentChatId} 
+                        onCloseMobile={() => setIsMobileOpen(false)}
+                        onTogglePin={handleTogglePin}
+                        onRename={handleRename}
+                        onDelete={handleChatDelete}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </motion.div>
             )}
             
             {recentChats.length > 0 && (
-              <div>
+              <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <h3 className="text-[11px] font-normal text-muted-foreground uppercase tracking-wider mb-2 px-3 mt-2">
                   Recent Chats
                 </h3>
-                <div className="space-y-1">
-                  {recentChats.map((chat) => (
-                    <ChatListItem 
-                      key={chat.id} 
-                      chat={chat} 
-                      currentChatId={currentChatId} 
-                      onCloseMobile={() => setIsMobileOpen(false)}
-                      onTogglePin={handleTogglePin}
-                      onRename={handleRename}
-                      onDelete={handleChatDelete}
-                    />
-                  ))}
-                </div>
-              </div>
+                <motion.div layout className="space-y-1">
+                  <AnimatePresence>
+                    {recentChats.map((chat) => (
+                      <ChatListItem 
+                        key={chat.id} 
+                        chat={chat} 
+                        currentChatId={currentChatId} 
+                        onCloseMobile={() => setIsMobileOpen(false)}
+                        onTogglePin={handleTogglePin}
+                        onRename={handleRename}
+                        onDelete={handleChatDelete}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </motion.div>
             )}
           </div>
         )}

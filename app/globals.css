@@ -50,9 +50,9 @@
   --popover:                hsl(0 0% 100%);
   --popover-foreground:     hsl(0 0% 9%);
 
-  /* Professional Monochromatic */
-  --primary:                hsl(0 0% 9%);
-  --primary-foreground:     hsl(0 0% 98%);
+  /* Refreshing Cyan */
+  --primary:                hsl(188 94% 43%);
+  --primary-foreground:     hsl(0 0% 100%);
 
   --secondary:              hsl(0 0% 96%);
   --secondary-foreground:   hsl(0 0% 15%);
@@ -68,7 +68,7 @@
 
   --border:                 hsl(0 0% 90%);
   --input:                  hsl(0 0% 90%);
-  --ring:                   hsl(0 0% 9%);
+  --ring:                   hsl(188 94% 43%);
 
   /* Hero / landing surface tokens */
   --hero-bg:          hsl(0 0% 100%);
@@ -78,7 +78,7 @@
   --hero-surface:     hsl(0 0% 100%);
   --hero-surface-md:  hsl(0 0% 97%);
   --hero-grid:        hsl(0 0% 90% / 0.6);
-  --hero-btn-bg:      hsl(0 0% 9%);
+  --hero-btn-bg:      hsl(188 94% 43%);
   --hero-btn-fg:      hsl(0 0% 100%);
   --hero-card-bg:     hsl(0 0% 100% / 0.92);
   --hero-card-border: hsl(0 0% 90%);
@@ -100,9 +100,9 @@
   --popover:                hsl(0 0% 6%);
   --popover-foreground:     hsl(0 0% 93%);
 
-  /* High contrast white */
-  --primary:                hsl(0 0% 98%);
-  --primary-foreground:     hsl(0 0% 9%);
+  /* Refreshing Cyan */
+  --primary:                hsl(188 100% 50%);
+  --primary-foreground:     hsl(0 0% 10%);
 
   --secondary:              hsl(0 0% 12%);
   --secondary-foreground:   hsl(0 0% 93%);
@@ -118,7 +118,7 @@
 
   --border:                 hsl(0 0% 15%);
   --input:                  hsl(0 0% 15%);
-  --ring:                   hsl(0 0% 98%);
+  --ring:                   hsl(188 100% 50%);
 
   /* Hero / landing surface tokens */
   --hero-bg:          hsl(0 0% 3%);
@@ -128,8 +128,8 @@
   --hero-surface:     hsl(0 0% 93% / 0.03);
   --hero-surface-md:  hsl(0 0% 93% / 0.07);
   --hero-grid:        hsl(0 0% 93% / 0.05);
-  --hero-btn-bg:      hsl(0 0% 98%);
-  --hero-btn-fg:      hsl(0 0% 3%);
+  --hero-btn-bg:      hsl(188 100% 50%);
+  --hero-btn-fg:      hsl(0 0% 10%);
   --hero-card-bg:     hsl(0 0% 6% / 0.96);
   --hero-card-border: hsl(0 0% 93% / 0.1);
 }

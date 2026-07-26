@@ -11,6 +11,7 @@ import { useState, useRef, useEffect, use } from 'react';
 import { toast } from 'sonner';
 import dynamic from 'next/dynamic';
 import remarkGfm from 'remark-gfm';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ReactMarkdown = dynamic(() => import('react-markdown'), { 
   ssr: false, 
@@ -22,7 +23,10 @@ function MessageItem({ message, isPending }: { message: Message; isPending: bool
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className={cn(
         'flex w-full group flex-col',
         message.role === 'user' ? 'items-end' : 'items-start'
@@ -30,14 +34,14 @@ function MessageItem({ message, isPending }: { message: Message; isPending: bool
     >
       <div
         className={cn(
-          'flex gap-4 text-sm',
+          'flex gap-3 sm:gap-4 text-sm',
           message.role === 'user'
-            ? 'bg-primary text-primary-foreground rounded-2xl rounded-tr-sm px-5 py-3 shadow-sm max-w-[85%] sm:max-w-[75%]'
-            : 'w-full max-w-4xl'
+            ? 'bg-primary/90 text-primary-foreground rounded-2xl rounded-tr-sm px-4 sm:px-5 py-2.5 sm:py-3 shadow-lg shadow-primary/20 backdrop-blur-md max-w-[85%] sm:max-w-[75%]'
+            : 'w-full max-w-4xl bg-card/60 rounded-2xl rounded-tl-sm px-4 sm:px-5 py-3 shadow-sm border border-border/50 backdrop-blur-md'
         )}
       >
         {message.role === 'assistant' && (
-          <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 mt-0.5">
+          <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 border border-primary/20 shadow-inner mt-0.5">
             <Bot className="h-4 w-4 text-primary" />
           </div>
         )}
@@ -63,19 +67,19 @@ function MessageItem({ message, isPending }: { message: Message; isPending: bool
       {/* Action Bar (Copy) */}
       {message.content && (
         <div className={cn(
-          "flex items-center opacity-0 group-hover:opacity-100 transition-opacity mt-1",
-          message.role === 'user' ? 'pr-1' : 'pl-12'
+          "flex items-center opacity-0 group-hover:opacity-100 transition-opacity mt-1.5",
+          message.role === 'user' ? 'pr-2' : 'pl-14'
         )}>
           <button
             onClick={() => copyToClipboard(message.content)}
-            className="p-1 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground flex items-center gap-1.5 text-[11px] font-medium"
+            className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground flex items-center gap-1.5 text-[11px] font-medium transition-colors"
           >
-            {isCopied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+            {isCopied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
             {isCopied ? <span className="text-green-500">Copied</span> : <span>Copy</span>}
           </button>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -92,6 +96,11 @@ export default function ChatSessionPage({ params }: { params: Promise<{ chatId: 
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    setIsInitialized(false);
+    setMessages([]);
+  }, [chatId]);
   
   useEffect(() => {
     if (chatDetails && !isInitialized) {
@@ -108,7 +117,7 @@ export default function ChatSessionPage({ params }: { params: Promise<{ chatId: 
       }
       setIsInitialized(true);
     }
-  }, [chatDetails, isInitialized, chatContext?.title]);
+  }, [chatDetails, isInitialized, chatContext?.title, chatId]);
 
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -184,52 +193,57 @@ export default function ChatSessionPage({ params }: { params: Promise<{ chatId: 
          </h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 scroll-smooth space-y-6 flex flex-col">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 scroll-smooth space-y-6 flex flex-col pb-32 lg:pb-32 relative">
+        {/* Subtle background glow for premium feel */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[50vh] bg-primary/5 blur-[100px] pointer-events-none rounded-full" />
+        
         {isLoadingDetails && !isInitialized ? (
           <div className="flex-1 flex items-center justify-center">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground/50" />
           </div>
         ) : (
-          <>
+          <AnimatePresence>
             {messages.map((message) => (
               <MessageItem key={message.id} message={message} isPending={isPending} />
             ))}
-          </>
+          </AnimatePresence>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="p-4 sm:p-6 bg-background">
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-full items-center gap-3 relative"
-        >
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Message your knowledge base..."
-            className="flex-1 h-14 rounded-2xl pl-5 pr-14 border-border/50 bg-muted/10 focus-visible:ring-primary shadow-sm text-base"
-            disabled={isPending || isLoadingDetails}
-          />
-          <Button 
-            type="submit" 
-            size="icon" 
-            disabled={!input.trim() || isPending || isLoadingDetails}
-            className="absolute right-2 h-10 w-10 rounded-xl shadow-sm transition-transform hover:scale-105 active:scale-95"
+      {/* Floating Input Area */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 pb-[calc(env(safe-area-inset-bottom)+4.5rem)] lg:pb-6 bg-gradient-to-t from-background via-background/90 to-transparent pointer-events-none">
+        <div className="max-w-4xl mx-auto w-full relative pointer-events-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="flex w-full items-center gap-3 relative shadow-xl shadow-black/5 dark:shadow-black/20 rounded-full"
           >
-            {isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-            <span className="sr-only">Send</span>
-          </Button>
-        </form>
-        <div className="mt-2 text-center">
-          <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">
-            AI can make mistakes. Verify important information.
-          </p>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Message your knowledge base..."
+              className="flex-1 h-14 rounded-full pl-6 pr-14 border-border/50 bg-background/60 backdrop-blur-xl focus-visible:ring-primary text-base"
+              disabled={isPending || isLoadingDetails}
+            />
+            <Button 
+              type="submit" 
+              size="icon" 
+              disabled={!input.trim() || isPending || isLoadingDetails}
+              className="absolute right-2 h-10 w-10 rounded-full shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 bg-primary text-primary-foreground"
+            >
+              {isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4 ml-0.5" />
+              )}
+              <span className="sr-only">Send</span>
+            </Button>
+          </form>
+          <div className="mt-3 text-center">
+            <p className="text-[10px] text-muted-foreground/80 font-medium uppercase tracking-widest backdrop-blur-sm px-2 py-0.5 rounded-full inline-block">
+              AI can make mistakes. Verify important information.
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -35,6 +35,7 @@ import { Logo } from '@/components/common/logo';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 const navItems = [
   { href: '/chat',        label: 'Chat',        icon: MessageSquare },
@@ -53,7 +54,6 @@ export function WorkspaceShell({ children, logout }: WorkspaceShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
   
   const displayName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || 'User';
@@ -76,82 +76,52 @@ export function WorkspaceShell({ children, logout }: WorkspaceShellProps) {
     <div className="min-h-[100dvh] bg-background text-foreground font-sans flex flex-col lg:flex-row">
       
       {/* ── Mobile top bar ───────────────────────────────────── */}
-      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background px-4 py-3 lg:hidden">
+      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-md px-4 py-3 lg:hidden">
         <div className="flex items-center gap-3">
-          <button 
-            type="button" 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-md p-2 text-foreground/70 hover:bg-muted hover:text-foreground transition-colors"
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded bg-primary/10 border border-primary/20">
-              <Logo className="h-4 w-4" />
-            </div>
-            <p className="text-sm font-normal tracking-tight">DocuMind</p>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 shadow-sm">
+            <Logo className="h-5 w-5" />
           </div>
+          <p className="text-sm font-medium tracking-tight">DocuMind</p>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
         </div>
       </div>
 
-      {/* ── Mobile nav menu (Overlay) ────────────────────────── */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 mt-14 bg-background lg:hidden animate-in fade-in zoom-in-95 duration-200 border-t border-border">
-          <nav className="flex flex-col gap-1 p-4 h-full overflow-y-auto pb-24">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors',
-                    active
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                  )}
-                >
-                  <Icon className="h-5 w-5" />
-                  {item.label}
-                </Link>
-              );
-            })}
-            
-            <div className="mt-auto pt-8">
-              <AlertDialog>
-                <AlertDialogTrigger
-                  render={
-                    <button
-                      type="button"
-                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                    />
-                  }
-                >
-                  <LogOut className="h-4 w-4" />
-                  Sign out
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      You will need to sign back in to access your workspace.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleLogout}>Log out</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </nav>
-        </div>
-      )}
+      {/* ── Mobile Bottom Navigation ───────────────────────────────── */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-border bg-background/80 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] pt-2 px-2 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'relative flex flex-col items-center justify-center gap-1 p-2 min-w-[64px] transition-colors',
+                active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <div className="relative flex items-center justify-center p-1.5 z-10">
+                {active && (
+                  <motion.div
+                    layoutId="mobile-nav-active"
+                    className="absolute inset-0 bg-primary/10 rounded-xl"
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  />
+                )}
+                <Icon className={cn("h-5 w-5 relative z-10 transition-transform duration-300", active ? "scale-110" : "")} />
+              </div>
+              <span className={cn(
+                "text-[10px] transition-all duration-300",
+                active ? "font-semibold" : "font-medium opacity-80"
+              )}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* ── Desktop Sidebar ─────────────────────────────────── */}
       <aside 
@@ -255,12 +225,12 @@ export function WorkspaceShell({ children, logout }: WorkspaceShellProps) {
       </aside>
 
       {/* ── Main Content Area ─────────────────────────────────── */}
-      <main className="flex-1 flex flex-col min-w-0 h-[100dvh] overflow-hidden bg-background relative">
+      <main className="flex-1 flex flex-col min-w-0 h-[100dvh] overflow-hidden bg-background relative pb-[calc(env(safe-area-inset-bottom)+4rem)] lg:pb-0">
         {/* Toggle Button when sidebar is closed */}
         <button
           onClick={() => setIsDesktopSidebarOpen(true)}
           className={cn(
-            "absolute top-4 left-4 z-50 hidden lg:flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background shadow-sm hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-300",
+            "absolute top-4 left-4 z-50 hidden lg:flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background/80 backdrop-blur-sm shadow-sm hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-300",
             isDesktopSidebarOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
           )}
         >
