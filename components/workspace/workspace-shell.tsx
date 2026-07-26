@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/components/providers/auth-provider';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { ThemeToggle } from '@/components/common/theme-toggle';
 
 import { fetchCollections } from '@/lib/collections';
 import { cn } from '@/lib/utils';
@@ -31,7 +31,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen
 } from 'lucide-react';
-import { Logo } from '@/components/logo';
+import { Logo } from '@/components/common/logo';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode } from 'react';

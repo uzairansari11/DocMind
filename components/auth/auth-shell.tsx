@@ -1,10 +1,11 @@
 import { ArrowLeft } from 'lucide-react';
-import { ThemeToggle } from '@/components/theme-toggle';
+import React from 'react';
+import { ThemeToggle } from '@/components/common/theme-toggle';
 import { AnimatedBackground } from '@/components/ui/animated-background';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-import { Logo } from '@/components/logo';
+import { Logo } from '@/components/common/logo';
 import type { ReactNode } from 'react';
 
 type AuthShellProps = {

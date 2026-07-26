@@ -1,6 +1,6 @@
-import { ThemeToggle } from '@/components/theme-toggle';
+import { ThemeToggle } from '@/components/common/theme-toggle';
 import { AnimatedBackground } from '@/components/ui/animated-background';
-import { Logo } from '@/components/logo';
+import { Logo } from '@/components/common/logo';
 import Link from 'next/link';
 
 const pipelineStages = [

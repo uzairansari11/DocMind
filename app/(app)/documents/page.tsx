@@ -2,20 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 import { SectionShell } from '@/components/workspace/section-shell';
-import { fetchAllDocuments } from '@/lib/documents';
+import { useDocuments } from '@/hooks/use-documents';
 import { cn } from '@/lib/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FileText, Loader2, Folder, Upload } from 'lucide-react';
 import { DocumentUploaderModal } from '@/components/documents/document-uploader-modal';
 import { toast } from 'sonner';
 
 export default function DocumentsPage() {
-  const queryClient = useQueryClient();
-
-  const { data: allDocuments = [], isLoading } = useQuery({
-    queryKey: ['documents'],
-    queryFn: fetchAllDocuments,
-  });
+  const { data: allDocuments = [], isLoading } = useDocuments();
 
   return (
     <SectionShell

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { uploadDocumentRequest } from '@/lib/documents';
-import { fetchCollections } from '@/lib/collections';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useUploadDocument } from '@/hooks/use-documents';
+import { useCollections } from '@/hooks/use-collections';
 import { toast } from 'sonner';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -21,35 +20,26 @@ export function DocumentUploaderModal({
   const [file, setFile] = useState<File | null>(null);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>(defaultCollectionId || '');
   const [open, setOpen] = useState(false);
-  const queryClient = useQueryClient();
+  const { data: collections = [], isLoading: isLoadingCollections } = useCollections();
 
-  const { data: collections = [], isLoading: isLoadingCollections } = useQuery({
-    queryKey: ['collections'],
-    queryFn: fetchCollections,
-    enabled: isOpen,
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: () => {
-      if (!file) throw new Error('No file selected');
-      if (!selectedCollectionId) throw new Error('No collection selected');
-      
-      return uploadDocumentRequest({
-        title: file.name,
-        collectionId: selectedCollectionId,
-        document: file,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-      toast.success('Document uploaded successfully');
-      setFile(null);
-      setIsOpen(false);
-    },
-    onError: (error) => {
-      toast.error('Failed to upload document', { description: error instanceof Error ? error.message : 'Unknown error' });
-    }
-  });
+  const { mutate, isPending } = useUploadDocument();
+  
+  const handleUpload = () => {
+    if (!file) return;
+    if (!selectedCollectionId) return;
+    
+    mutate({
+      title: file.name,
+      collectionId: selectedCollectionId,
+      document: file,
+    }, {
+      onSuccess: () => {
+        toast.success('Document uploaded successfully');
+        setFile(null);
+        setIsOpen(false);
+      }
+    });
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -176,7 +166,7 @@ export function DocumentUploaderModal({
                 Cancel
               </Button>
               <Button 
-                onClick={() => mutate()} 
+                onClick={handleUpload} 
                 disabled={isPending || !file || !selectedCollectionId}
                 className="flex-1 h-11"
               >

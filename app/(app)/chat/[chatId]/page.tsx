@@ -3,14 +3,19 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { sendMessageStream, fetchChats, fetchChatDetails, type Message } from '@/lib/chats';
+import { sendMessageStream, type Message } from '@/lib/chats';
+import { useChats, useChatDetails } from '@/hooks/use-chats';
 import { cn } from '@/lib/utils';
-import { useQuery } from '@tanstack/react-query';
 import { Loader2, Send, Bot, Sparkles, Copy, Check } from 'lucide-react';
 import { useState, useRef, useEffect, use } from 'react';
 import { toast } from 'sonner';
-import ReactMarkdown from 'react-markdown';
+import dynamic from 'next/dynamic';
 import remarkGfm from 'remark-gfm';
+
+const ReactMarkdown = dynamic(() => import('react-markdown'), { 
+  ssr: false, 
+  loading: () => <div className="animate-pulse bg-muted/50 w-full h-10 rounded-md" /> 
+});
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
 function MessageItem({ message, isPending }: { message: Message; isPending: boolean }) {
@@ -79,18 +84,11 @@ function MessageItem({ message, isPending }: { message: Message; isPending: bool
 export default function ChatSessionPage({ params }: { params: Promise<{ chatId: string }> }) {
   const { chatId } = use(params);
   
-  const { data: pastChats = [] } = useQuery({
-    queryKey: ['chats'],
-    queryFn: fetchChats,
-  });
+  const { data: pastChats = [] } = useChats();
   
   const chatContext = pastChats.find((c) => c.id === chatId);
 
-  const { data: chatDetails, isLoading: isLoadingDetails } = useQuery({
-    queryKey: ['chatDetails', chatId],
-    queryFn: () => fetchChatDetails(chatId),
-    enabled: !!chatId,
-  });
+  const { data: chatDetails, isLoading: isLoadingDetails } = useChatDetails(chatId);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);

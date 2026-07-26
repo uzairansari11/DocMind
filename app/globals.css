@@ -35,104 +35,103 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   LIGHT MODE — High-Contrast
+   LIGHT MODE — Premium Violet
 ═══════════════════════════════════════════════════════════════ */
 :root {
   color-scheme: light;
-  --radius: 0.5rem; 
+  --radius: 0.75rem; 
 
-  --background:             hsl(0 0% 100%); 
-  --foreground:             hsl(0 0% 10%); 
+  --background:             hsl(260 20% 99%); 
+  --foreground:             hsl(260 30% 10%); 
 
-  --card:                   hsl(0 0% 98%);
-  --card-foreground:        hsl(0 0% 10%);
+  --card:                   hsl(0 0% 100%);
+  --card-foreground:        hsl(260 30% 10%);
 
-  --popover:                hsl(0 0% 98%);
-  --popover-foreground:     hsl(0 0% 10%);
+  --popover:                hsl(0 0% 100%);
+  --popover-foreground:     hsl(260 30% 10%);
 
-  /* Vibrant Orange */
-  --primary:                hsl(32 100% 50%);
-  --primary-foreground:     hsl(0 0% 10%);
+  /* Premium Violet */
+  --primary:                hsl(260 85% 55%);
+  --primary-foreground:     hsl(0 0% 100%);
 
-  --secondary:              hsl(0 0% 92%);
-  --secondary-foreground:   hsl(0 0% 15%);
+  --secondary:              hsl(260 20% 95%);
+  --secondary-foreground:   hsl(260 30% 15%);
 
-  --muted:                  hsl(0 0% 94%);
-  --muted-foreground:       hsl(0 0% 40%); 
+  --muted:                  hsl(260 20% 95%);
+  --muted-foreground:       hsl(260 10% 45%); 
 
-  --accent:                 hsl(0 0% 94%);
-  --accent-foreground:      hsl(0 0% 10%);
+  --accent:                 hsl(260 20% 95%);
+  --accent-foreground:      hsl(260 30% 10%);
 
-  --destructive:            hsl(0 84% 60%); 
+  --destructive:            hsl(340 80% 55%); 
   --destructive-foreground: hsl(0 0% 100%);
 
-  --border:                 hsl(0 0% 88%);
-  --input:                  hsl(0 0% 88%);
-  --ring:                   hsl(32 100% 50%);
+  --border:                 hsl(260 20% 90%);
+  --input:                  hsl(260 20% 90%);
+  --ring:                   hsl(260 85% 55%);
 
   /* Hero / landing surface tokens */
   --hero-bg:          hsl(0 0% 100%);
-  --hero-fg:          hsl(224 71% 4%);
-  --hero-muted:       hsl(215 16% 47%);
-  --hero-border:      hsl(214 32% 91%);
+  --hero-fg:          hsl(260 30% 10%);
+  --hero-muted:       hsl(260 10% 45%);
+  --hero-border:      hsl(260 20% 90%);
   --hero-surface:     hsl(0 0% 100%);
-  --hero-surface-md:  hsl(210 40% 96%);
-  --hero-grid:        hsl(214 32% 91% / 0.6);
-  --hero-btn-bg:      hsl(224 71% 4%);
+  --hero-surface-md:  hsl(260 20% 97%);
+  --hero-grid:        hsl(260 20% 90% / 0.6);
+  --hero-btn-bg:      hsl(260 85% 55%);
   --hero-btn-fg:      hsl(0 0% 100%);
   --hero-card-bg:     hsl(0 0% 100% / 0.92);
-  --hero-card-border: hsl(214 32% 91%);
+  --hero-card-border: hsl(260 20% 90%);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DARK MODE — Pitch Black & Orange
+   DARK MODE — Midnight Violet
 ═══════════════════════════════════════════════════════════════ */
 .dark {
   color-scheme: dark;
 
-  /* Pitch black background */
-  --background:             hsl(0 0% 0%); 
-  --foreground:             hsl(0 0% 96%); 
+  /* Deep Violet-Black */
+  --background:             hsl(260 25% 4%); 
+  --foreground:             hsl(260 10% 96%); 
 
-  /* Dark grey for cards to stand out slightly from black */
-  --card:                   hsl(0 0% 7%);
-  --card-foreground:        hsl(0 0% 96%);
+  --card:                   hsl(260 20% 7%);
+  --card-foreground:        hsl(260 10% 96%);
 
-  --popover:                hsl(0 0% 7%);
-  --popover-foreground:     hsl(0 0% 96%);
+  --popover:                hsl(260 20% 7%);
+  --popover-foreground:     hsl(260 10% 96%);
 
-  /* Vibrant Orange */
-  --primary:                hsl(32 100% 50%);
-  --primary-foreground:     hsl(0 0% 10%);
+  /* Soft Violet */
+  --primary:                hsl(260 85% 70%);
+  --primary-foreground:     hsl(260 30% 10%);
 
-  --secondary:              hsl(0 0% 15%);
-  --secondary-foreground:   hsl(0 0% 96%);
+  --secondary:              hsl(260 20% 12%);
+  --secondary-foreground:   hsl(260 10% 96%);
 
-  --muted:                  hsl(0 0% 12%);
-  --muted-foreground:       hsl(0 0% 65%);
+  --muted:                  hsl(260 20% 12%);
+  --muted-foreground:       hsl(260 10% 65%);
 
-  --accent:                 hsl(0 0% 14%);
-  --accent-foreground:      hsl(0 0% 96%);
+  --accent:                 hsl(260 20% 12%);
+  --accent-foreground:      hsl(260 10% 96%);
 
-  --destructive:            hsl(0 84% 60%);
+  --destructive:            hsl(340 80% 60%);
   --destructive-foreground: hsl(0 0% 100%);
 
-  --border:                 hsl(0 0% 18%);
-  --input:                  hsl(0 0% 18%);
-  --ring:                   hsl(32 100% 50%);
+  --border:                 hsl(260 20% 16%);
+  --input:                  hsl(260 20% 16%);
+  --ring:                   hsl(260 85% 70%);
 
   /* Hero / landing surface tokens */
-  --hero-bg:          hsl(0 0% 6%);
-  --hero-fg:          hsl(0 0% 96%);
-  --hero-muted:       hsl(0 0% 96% / 0.45);
-  --hero-border:      hsl(0 0% 96% / 0.08);
-  --hero-surface:     hsl(0 0% 96% / 0.03);
-  --hero-surface-md:  hsl(0 0% 96% / 0.07);
-  --hero-grid:        hsl(0 0% 96% / 0.05);
-  --hero-btn-bg:      hsl(0 0% 96%);
-  --hero-btn-fg:      hsl(0 0% 7%);
-  --hero-card-bg:     hsl(0 0% 9% / 0.96);
-  --hero-card-border: hsl(0 0% 96% / 0.1);
+  --hero-bg:          hsl(260 25% 4%);
+  --hero-fg:          hsl(260 10% 96%);
+  --hero-muted:       hsl(260 10% 96% / 0.45);
+  --hero-border:      hsl(260 10% 96% / 0.08);
+  --hero-surface:     hsl(260 10% 96% / 0.03);
+  --hero-surface-md:  hsl(260 10% 96% / 0.07);
+  --hero-grid:        hsl(260 10% 96% / 0.05);
+  --hero-btn-bg:      hsl(260 85% 70%);
+  --hero-btn-fg:      hsl(260 30% 10%);
+  --hero-card-bg:     hsl(260 20% 7% / 0.96);
+  --hero-card-border: hsl(260 10% 96% / 0.1);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -154,7 +153,7 @@
   body {
     overflow-x: hidden;
     @apply min-h-screen bg-background text-foreground antialiased;
-    font-family: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     letter-spacing: -0.01em;
   }

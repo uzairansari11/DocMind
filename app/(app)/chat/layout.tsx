@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { createChatRequest, fetchChats, updateChatRequest, deleteChatRequest } from '@/lib/chats';
-import { fetchCollections } from '@/lib/collections';
+import { useChats, useCreateChat, useUpdateChat, useDeleteChat } from '@/hooks/use-chats';
+import { useCollections } from '@/hooks/use-collections';
 import { cn } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2, Plus, MessageSquare, Pin, PinOff, Edit2, Check, X, Trash2, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
@@ -170,17 +170,13 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const { data: collections = [] } = useQuery({
-    queryKey: ['collections'],
-    queryFn: fetchCollections,
-  });
-
+  const { data: collections = [] } = useCollections();
   const allDocuments = collections.flatMap(c => c.documents || []);
 
-  const { data: pastChats = [], isLoading: isLoadingChats } = useQuery({
-    queryKey: ['chats'],
-    queryFn: fetchChats,
-  });
+  const { data: pastChats = [], isLoading: isLoadingChats } = useChats();
+  const { mutate: createChat } = useCreateChat();
+  const { mutate: updateChat } = useUpdateChat();
+  const { mutate: deleteChat } = useDeleteChat();
 
   const startNewChat = () => {
     setIsNewChatModalOpen(true);
@@ -188,50 +184,39 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   };
 
   const handleCreateChat = async (title: string, documentIds: string[]) => {
-    try {
-      const chat = await createChatRequest({
-        title,
-        documentIds,
-      });
-      router.push(`/chat/${chat.id}`);
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
-      toast.success('Chat created');
-    } catch (error) {
-      toast.error('Failed to create chat');
-    }
+    createChat({ title, documentIds }, {
+      onSuccess: (chat) => {
+        router.push(`/chat/${chat.id}`);
+        toast.success('Chat created');
+      }
+    });
   };
 
   const handleTogglePin = async (chatId: string, currentPinStatus: boolean) => {
-    try {
-      await updateChatRequest(chatId, { isPinned: !currentPinStatus });
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
-      toast.success(currentPinStatus ? 'Chat unpinned' : 'Chat pinned');
-    } catch (error) {
-      toast.error('Failed to update chat');
-    }
+    updateChat({ chatId, payload: { isPinned: !currentPinStatus } }, {
+      onSuccess: () => {
+        toast.success(currentPinStatus ? 'Chat unpinned' : 'Chat pinned');
+      }
+    });
   };
 
   const handleRename = async (chatId: string, newTitle: string) => {
-    try {
-      await updateChatRequest(chatId, { title: newTitle });
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
-      toast.success('Chat renamed');
-    } catch (error) {
-      toast.error('Failed to rename chat');
-    }
+    updateChat({ chatId, payload: { title: newTitle } }, {
+      onSuccess: () => {
+        toast.success('Chat renamed');
+      }
+    });
   };
 
   const handleChatDelete = async (chatId: string) => {
-    try {
-      await deleteChatRequest(chatId);
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
-      toast.success('Chat deleted');
-      if (currentChatId === chatId) {
-        router.push('/chat');
+    deleteChat(chatId, {
+      onSuccess: () => {
+        toast.success('Chat deleted');
+        if (currentChatId === chatId) {
+          router.push('/chat');
+        }
       }
-    } catch (error) {
-      toast.error('Failed to delete chat');
-    }
+    });
   };
 
   const pinnedChats = pastChats.filter((c) => c.isPinned);

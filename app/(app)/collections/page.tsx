@@ -3,14 +3,8 @@
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SectionShell } from '@/components/workspace/section-shell';
-import {
-  createCollectionRequest,
-  fetchCollections,
-  updateCollectionRequest,
-  deleteCollectionRequest,
-} from '@/lib/collections';
+import { useCollections, useCreateCollection, useUpdateCollection, useDeleteCollection } from '@/hooks/use-collections';
 import { cn } from '@/lib/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Loader2,
   Plus,
@@ -38,59 +32,27 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export default function CollectionsPage() {
-  const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
 
-  const { data: collections = [], isLoading } = useQuery({
-    queryKey: ['collections'],
-    queryFn: fetchCollections,
-  });
-
-  const { mutate: create, isPending: isCreatingPending } = useMutation({
-    mutationFn: (title: string) => createCollectionRequest({ title, description: '' }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-      toast.success('Collection created');
-      setIsCreating(false);
-      setNewTitle('');
-    },
-    onError: () => {
-      toast.error('Failed to create collection');
-    },
-  });
-
-  const { mutate: update, isPending: isUpdating } = useMutation({
-    mutationFn: ({ id, title }: { id: string; title: string }) =>
-      updateCollectionRequest({ id, payload: { title } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-      toast.success('Collection updated');
-      setEditingId(null);
-    },
-    onError: () => {
-      toast.error('Failed to update collection');
-    },
-  });
-
-  const { mutate: remove, isPending: isDeleting } = useMutation({
-    mutationFn: deleteCollectionRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-      toast.success('Collection deleted');
-    },
-    onError: () => {
-      toast.error('Failed to delete collection');
-    },
-  });
+  const { data: collections = [], isLoading } = useCollections();
+  const { mutate: create, isPending: isCreatingPending } = useCreateCollection();
+  const { mutate: update, isPending: isUpdating } = useUpdateCollection();
+  const { mutate: remove, isPending: isDeleting } = useDeleteCollection();
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
-    create(newTitle.trim());
+    create({ title: newTitle.trim(), description: '' }, {
+      onSuccess: () => {
+        toast.success('Collection created');
+        setIsCreating(false);
+        setNewTitle('');
+      }
+    });
   };
 
   const handleUpdate = (e: React.FormEvent, id: string) => {
@@ -100,7 +62,12 @@ export default function CollectionsPage() {
       setEditingId(null);
       return;
     }
-    update({ id, title: editTitle.trim() });
+    update({ id, payload: { title: editTitle.trim() } }, {
+      onSuccess: () => {
+        toast.success('Collection updated');
+        setEditingId(null);
+      }
+    });
   };
 
   const startEditing = (e: React.MouseEvent, id: string, currentTitle: string) => {
@@ -278,7 +245,7 @@ export default function CollectionsPage() {
                       <AlertDialogFooter>
                         <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
                         <AlertDialogAction 
-                          onClick={(e) => { e.stopPropagation(); remove(collection.id); }}
+                          onClick={(e) => { e.stopPropagation(); remove(collection.id, { onSuccess: () => toast.success('Collection deleted') }); }}
                           className="bg-red-600 hover:bg-red-700 text-white"
                         >
                           Delete
