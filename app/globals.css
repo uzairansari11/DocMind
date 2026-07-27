@@ -7,25 +7,25 @@
 
 /* ── Map CSS vars → Tailwind color utilities ─────────────────── */
 @theme inline {
-  --color-background:             var(--background);
-  --color-foreground:             var(--foreground);
-  --color-card:                   var(--card);
-  --color-card-foreground:        var(--card-foreground);
-  --color-popover:                var(--popover);
-  --color-popover-foreground:     var(--popover-foreground);
-  --color-primary:                var(--primary);
-  --color-primary-foreground:     var(--primary-foreground);
-  --color-secondary:              var(--secondary);
-  --color-secondary-foreground:   var(--secondary-foreground);
-  --color-muted:                  var(--muted);
-  --color-muted-foreground:       var(--muted-foreground);
-  --color-accent:                 var(--accent);
-  --color-accent-foreground:      var(--accent-foreground);
-  --color-destructive:            var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border:                 var(--border);
-  --color-input:                  var(--input);
-  --color-ring:                   var(--ring);
+  --color-background:             hsl(var(--background));
+  --color-foreground:             hsl(var(--foreground));
+  --color-card:                   hsl(var(--card));
+  --color-card-foreground:        hsl(var(--card-foreground));
+  --color-popover:                hsl(var(--popover));
+  --color-popover-foreground:     hsl(var(--popover-foreground));
+  --color-primary:                hsl(var(--primary));
+  --color-primary-foreground:     hsl(var(--primary-foreground));
+  --color-secondary:              hsl(var(--secondary));
+  --color-secondary-foreground:   hsl(var(--secondary-foreground));
+  --color-muted:                  hsl(var(--muted));
+  --color-muted-foreground:       hsl(var(--muted-foreground));
+  --color-accent:                 hsl(var(--accent));
+  --color-accent-foreground:      hsl(var(--accent-foreground));
+  --color-destructive:            hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border:                 hsl(var(--border));
+  --color-input:                  hsl(var(--input));
+  --color-ring:                   hsl(var(--ring));
 
   --radius-sm:  calc(var(--radius) - 4px);
   --radius-md:  calc(var(--radius) - 2px);
@@ -35,103 +35,103 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   LIGHT MODE — Clean & Professional
+   LIGHT MODE — Warm Ivory & Sepia
 ═══════════════════════════════════════════════════════════════ */
 :root {
   color-scheme: light;
   --radius: 0.5rem; 
 
-  --background:             hsl(0 0% 100%); 
-  --foreground:             hsl(0 0% 9%); 
+  --background:             45 35% 96%; 
+  --foreground:             40 20% 12%; 
 
-  --card:                   hsl(0 0% 100%);
-  --card-foreground:        hsl(0 0% 9%);
+  --card:                   45 45% 98%;
+  --card-foreground:        40 20% 12%;
 
-  --popover:                hsl(0 0% 100%);
-  --popover-foreground:     hsl(0 0% 9%);
+  --popover:                45 45% 98%;
+  --popover-foreground:     40 20% 12%;
 
-  /* Refreshing Cyan */
-  --primary:                hsl(188 94% 43%);
-  --primary-foreground:     hsl(0 0% 100%);
+  /* Warm Dark Charcoal */
+  --primary:                40 25% 15%;
+  --primary-foreground:     45 45% 98%;
 
-  --secondary:              hsl(0 0% 96%);
-  --secondary-foreground:   hsl(0 0% 15%);
+  --secondary:              45 30% 90%;
+  --secondary-foreground:   40 20% 15%;
 
-  --muted:                  hsl(0 0% 96%);
-  --muted-foreground:       hsl(0 0% 45%); 
+  --muted:                  45 25% 90%;
+  --muted-foreground:       40 15% 45%; 
 
-  --accent:                 hsl(0 0% 96%);
-  --accent-foreground:      hsl(0 0% 9%);
+  --accent:                 45 30% 90%;
+  --accent-foreground:      40 20% 12%;
 
-  --destructive:            hsl(0 84% 60%); 
-  --destructive-foreground: hsl(0 0% 100%);
+  --destructive:            0 84% 60%; 
+  --destructive-foreground: 0 0% 100%;
 
-  --border:                 hsl(0 0% 90%);
-  --input:                  hsl(0 0% 90%);
-  --ring:                   hsl(188 94% 43%);
+  --border:                 45 20% 85%;
+  --input:                  45 20% 85%;
+  --ring:                   40 25% 15%;
 
   /* Hero / landing surface tokens */
-  --hero-bg:          hsl(0 0% 100%);
-  --hero-fg:          hsl(0 0% 9%);
-  --hero-muted:       hsl(0 0% 45%);
-  --hero-border:      hsl(0 0% 90%);
-  --hero-surface:     hsl(0 0% 100%);
-  --hero-surface-md:  hsl(0 0% 97%);
-  --hero-grid:        hsl(0 0% 90% / 0.6);
-  --hero-btn-bg:      hsl(188 94% 43%);
-  --hero-btn-fg:      hsl(0 0% 100%);
-  --hero-card-bg:     hsl(0 0% 100% / 0.92);
-  --hero-card-border: hsl(0 0% 90%);
+  --hero-bg:          45 35% 96%;
+  --hero-fg:          40 20% 12%;
+  --hero-muted:       40 15% 45%;
+  --hero-border:      45 20% 85%;
+  --hero-surface:     45 45% 98%;
+  --hero-surface-md:  45 30% 90%;
+  --hero-grid:        45 20% 85% / 0.6;
+  --hero-btn-bg:      40 25% 15%;
+  --hero-btn-fg:      45 45% 98%;
+  --hero-card-bg:     45 45% 98% / 0.92;
+  --hero-card-border: 45 20% 85%;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DARK MODE — Clean & Professional
+   DARK MODE — Warm Mocha (Espresso)
 ═══════════════════════════════════════════════════════════════ */
 .dark {
   color-scheme: dark;
 
-  /* Sleek Dark Gray */
-  --background:             hsl(0 0% 3%); 
-  --foreground:             hsl(0 0% 93%); 
+  /* Deep Warm Espresso */
+  --background:             40 10% 4%; 
+  --foreground:             40 15% 92%; 
 
-  --card:                   hsl(0 0% 6%);
-  --card-foreground:        hsl(0 0% 93%);
+  --card:                   40 12% 7%;
+  --card-foreground:        40 15% 92%;
 
-  --popover:                hsl(0 0% 6%);
-  --popover-foreground:     hsl(0 0% 93%);
+  --popover:                40 12% 7%;
+  --popover-foreground:     40 15% 92%;
 
-  /* Refreshing Cyan */
-  --primary:                hsl(188 100% 50%);
-  --primary-foreground:     hsl(0 0% 10%);
+  /* Professional Off-White */
+  --primary:                40 10% 92%;
+  --primary-foreground:     40 10% 10%;
 
-  --secondary:              hsl(0 0% 12%);
-  --secondary-foreground:   hsl(0 0% 93%);
+  --secondary:              40 12% 12%;
+  --secondary-foreground:   40 15% 92%;
 
-  --muted:                  hsl(0 0% 10%);
-  --muted-foreground:       hsl(0 0% 65%);
+  --muted:                  40 12% 10%;
+  --muted-foreground:       40 10% 60%;
 
-  --accent:                 hsl(0 0% 10%);
-  --accent-foreground:      hsl(0 0% 93%);
+  --accent:                 40 12% 12%;
+  --accent-foreground:      40 15% 92%;
 
-  --destructive:            hsl(0 84% 60%);
-  --destructive-foreground: hsl(0 0% 100%);
+  --destructive:            0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-  --border:                 hsl(0 0% 15%);
-  --input:                  hsl(0 0% 15%);
-  --ring:                   hsl(188 100% 50%);
+  --border:                 40 15% 15%;
+  --input:                  40 15% 15%;
+  --ring:                   40 10% 90%;
 
   /* Hero / landing surface tokens */
-  --hero-bg:          hsl(0 0% 3%);
-  --hero-fg:          hsl(0 0% 93%);
-  --hero-muted:       hsl(0 0% 93% / 0.45);
-  --hero-border:      hsl(0 0% 93% / 0.08);
-  --hero-surface:     hsl(0 0% 93% / 0.03);
-  --hero-surface-md:  hsl(0 0% 93% / 0.07);
-  --hero-grid:        hsl(0 0% 93% / 0.05);
-  --hero-btn-bg:      hsl(188 100% 50%);
-  --hero-btn-fg:      hsl(0 0% 10%);
-  --hero-card-bg:     hsl(0 0% 6% / 0.96);
-  --hero-card-border: hsl(0 0% 93% / 0.1);
+  --hero-bg:          40 10% 4%;
+  --hero-fg:          40 15% 92%;
+  --hero-muted:       40 10% 92% / 0.45;
+  --hero-border:      40 10% 92% / 0.08;
+  --hero-surface:     40 10% 92% / 0.04;
+  --hero-surface-md:  40 10% 92% / 0.08;
+  --hero-grid:        40 10% 92% / 0.06;
+  --hero-btn-bg:      40 10% 92%;
+  --hero-btn-fg:      40 10% 10%;
+  --hero-card-bg:     40 12% 7% / 0.96;
+  --hero-card-border: 40 10% 92% / 0.1;
 }
 
 /* ═══════════════════════════════════════════════════════════════
