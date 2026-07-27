@@ -5,22 +5,12 @@ export function Logo({ className }: { className?: string }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={cn("text-primary", className)}
+      fill="currentColor"
+      className={cn("text-foreground", className)}
     >
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14 2 14 8 20 8" />
-      <path d="M10 13a2 2 0 1 0 4 0 2 2 0 1 0-4 0" />
-      <path d="M12 11v-1" />
-      <path d="M12 16v1" />
-      <path d="M9.5 14.5l-1 1" />
-      <path d="M14.5 14.5l1 1" />
-      <path d="M9.5 11.5l-1-1" />
-      <path d="M14.5 11.5l1-1" />
+      <path 
+        d="M5 2V22H12C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z M9 6H12C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18H9Z" 
+      />
     </svg>
   );
 }

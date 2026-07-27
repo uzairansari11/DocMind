@@ -29,7 +29,8 @@ import {
   X,
   SquareDashedBottomCode,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Mic
 } from 'lucide-react';
 import { Logo } from '@/components/common/logo';
 import Link from 'next/link';
@@ -39,6 +40,7 @@ import { motion } from 'framer-motion';
 
 const navItems = [
   { href: '/chat',        label: 'Chat',        icon: MessageSquare },
+  { href: '/podcast',     label: 'Podcast',     icon: Mic },
   { href: '/collections', label: 'Collections', icon: BookOpen },
   { href: '/documents',   label: 'Documents',   icon: FileText },
   { href: '/upload',      label: 'Upload',      icon: Upload },
@@ -78,9 +80,7 @@ export function WorkspaceShell({ children, logout }: WorkspaceShellProps) {
       {/* ── Mobile top bar ───────────────────────────────────── */}
       <div className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-md px-4 py-3 lg:hidden">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 shadow-sm">
-            <Logo className="h-5 w-5" />
-          </div>
+          <Logo className="h-6 w-6" />
           <p className="text-sm font-medium tracking-tight">DocuMind</p>
         </div>
         <div className="flex items-center gap-2">
@@ -134,9 +134,7 @@ export function WorkspaceShell({ children, logout }: WorkspaceShellProps) {
             {/* Brand */}
             <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b border-border/50">
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 shadow-sm">
-                  <Logo className="h-5 w-5" />
-                </div>
+                <Logo className="h-6 w-6" />
                 <span className="text-sm font-normal tracking-tight">DocuMind</span>
               </div>
               <button
@@ -236,8 +234,8 @@ export function WorkspaceShell({ children, logout }: WorkspaceShellProps) {
         >
           <PanelLeftOpen className="h-4 w-4" />
         </button>
-        <div className={cn("flex-1 overflow-y-auto scroll-smooth", pathname.startsWith('/chat') ? "p-0" : "p-4 sm:p-6 lg:p-8")}>
-          <div className={cn("h-full animate-in fade-in duration-500", pathname.startsWith('/chat') ? "w-full max-w-none" : "mx-auto max-w-7xl")}>
+        <div className="flex-1 overflow-y-auto scroll-smooth p-4 sm:p-6 lg:p-8">
+          <div className="h-full animate-in fade-in duration-500 mx-auto max-w-7xl">
             {children}
           </div>
         </div>
