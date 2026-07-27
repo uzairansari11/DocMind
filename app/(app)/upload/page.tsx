@@ -37,7 +37,7 @@ export default function UploadPage() {
       <div className="max-w-3xl space-y-8">
         <div>
            <p className="text-muted-foreground">
-             Upload PDF, text, or markdown files. We'll automatically process and vectorize them so you can chat with your data instantly.
+             Upload PDF files. We'll automatically process and vectorize them so you can chat with your data instantly.
            </p>
         </div>
 
@@ -111,7 +111,7 @@ export default function UploadPage() {
 
             {/* Upload Area */}
             {selectedCollectionId && (
-              <div className="rounded-xl border border-border/40 bg-card p-6 shadow-sm animate-in fade-in zoom-in-95 duration-300">
+              <div className="animate-in fade-in zoom-in-95 duration-300">
                 <DocumentUploader
                   collectionId={selectedCollectionId}
                   onUploadComplete={() => {}}

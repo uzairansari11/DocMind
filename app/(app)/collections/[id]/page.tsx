@@ -12,6 +12,8 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { DocumentTable } from '@/components/documents/document-table';
+import { DataState } from '@/components/ui/data-state';
 import { cn } from '@/lib/utils';
 import {
   AlertDialog,
@@ -207,51 +209,24 @@ export default function CollectionDetailsPage() {
              </span>
           </div>
 
-          {!collection.documents?.length ? (
-            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/20 p-8 text-center animate-in fade-in duration-500">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-muted shadow-sm">
-                <FileText className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <h3 className="mb-1 text-base font-normal text-foreground">No documents</h3>
-              <p className="text-sm text-muted-foreground max-w-sm mb-6">
-                Upload some documents to this collection to start chatting with them.
-              </p>
-              <DocumentUploaderModal defaultCollectionId={id}>
-                 <Button className="gap-2 shadow-sm rounded-lg">
+          <DataState
+            isEmpty={!collection.documents?.length}
+            emptyIcon={FileText}
+            emptyTitle="No documents"
+            emptyDescription="Upload some documents to this collection to start chatting with them."
+            emptyAction={
+              <DocumentUploaderModal defaultCollectionId={id as string}>
+                 <Button className="gap-2 shadow-sm rounded-lg mt-4">
                     <FileText className="h-4 w-4" />
                     Upload Document
                  </Button>
               </DocumentUploaderModal>
+            }
+          >
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <DocumentTable documents={collection.documents || []} hideCollection={true} />
             </div>
-          ) : (
-            <div className="space-y-3">
-              {collection.documents.map((doc: DocumentPreview, index: number) => (
-                <div
-                  key={doc.id}
-                  className="group flex items-center justify-between rounded-xl border border-border/40 bg-card p-4 shadow-sm transition-all hover:border-border hover:shadow-md animate-in slide-in-from-bottom-2 fade-in fill-mode-both"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <div className="flex items-center gap-4 overflow-hidden">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <FileText className="h-5 w-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate font-medium text-foreground">{doc.title || doc.fileName}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-                        <span>{doc.status}</span>
-                        {doc.createdAt && (
-                           <>
-                             <span>•</span>
-                             <span>{new Date(doc.createdAt).toLocaleDateString()}</span>
-                           </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          </DataState>
         </div>
       </div>
     </SectionShell>

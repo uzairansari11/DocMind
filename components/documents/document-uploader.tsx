@@ -37,7 +37,12 @@ export function DocumentUploader({ collectionId, onUploadComplete }: { collectio
     e.preventDefault();
     e.stopPropagation();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFile(e.dataTransfer.files[0]);
+      const droppedFile = e.dataTransfer.files[0];
+      if (droppedFile.type === 'application/pdf' || droppedFile.name.toLowerCase().endsWith('.pdf')) {
+        setFile(droppedFile);
+      } else {
+        toast.error('Only PDF files are allowed');
+      }
     }
   };
 
@@ -56,12 +61,19 @@ export function DocumentUploader({ collectionId, onUploadComplete }: { collectio
             <p className="mb-2 text-base font-medium text-foreground">
               Click to upload or drag and drop
             </p>
-            <p className="text-sm text-muted-foreground">PDF, TXT, or MD up to 10MB</p>
+            <p className="text-sm text-muted-foreground">PDF up to 10MB</p>
             <input 
               type="file" 
               className="hidden" 
-              onChange={(e) => setFile(e.target.files?.[0] || null)} 
-              accept=".pdf,.txt,.md"
+              onChange={(e) => {
+                const selected = e.target.files?.[0];
+                if (selected && (selected.type === 'application/pdf' || selected.name.toLowerCase().endsWith('.pdf'))) {
+                  setFile(selected);
+                } else if (selected) {
+                  toast.error('Only PDF files are allowed');
+                }
+              }} 
+              accept=".pdf,application/pdf"
             />
           </label>
         </div>
