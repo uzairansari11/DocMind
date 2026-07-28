@@ -79,8 +79,8 @@ export function Flashcard({ card, onSwipe, index }: FlashcardProps) {
         <div 
           className={cn(
             "absolute inset-0 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center",
-            "bg-primary/[0.03] border border-primary/20 shadow-xl",
-            "dark:bg-primary/[0.05] dark:border-primary/30 dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
+            "bg-card border-2 border-primary/20 shadow-xl",
+            "dark:bg-[#1a1a1a] dark:border-primary/30 dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
           )}
           style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
