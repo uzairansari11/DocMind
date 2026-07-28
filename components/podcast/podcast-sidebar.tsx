@@ -3,63 +3,100 @@
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useCollections } from '@/hooks/use-collections';
 import { useDocuments } from '@/hooks/use-documents';
-import { usePodcasts } from '@/hooks/use-podcasts';
-import { Play, Loader2, Plus, Headphones, Calendar, Volume2 } from 'lucide-react';
+import { usePodcasts, useGeneratePodcast, useDeletePodcast, useUpdatePodcast } from '@/hooks/use-podcasts';
+import { Play, Loader2, Plus, Headphones, Calendar, Volume2, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { PodcastSetupModal } from '@/components/podcast/podcast-setup-modal';
-import { api } from '@/lib/api';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 export function PodcastSidebar() {
   const router = useRouter();
   const params = useParams();
   const currentId = params.id as string;
 
-  const { data: collections } = useCollections();
   const { data: documents } = useDocuments();
   const { data: podcasts, isLoading: isLoadingPodcasts, error: podcastsError } = usePodcasts();
   
-  const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
+  const generateMutation = useGeneratePodcast();
+  const deleteMutation = useDeletePodcast();
+  const updateMutation = useUpdatePodcast();
+  
+  const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
   const [topic, setTopic] = useState('');
   
   const [status, setStatus] = useState<'idle' | 'generating_script' | 'generating_audio' | 'ready'>('idle');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const toggleSelection = (id: string) => {
-    const newSet = new Set(selectedDocs);
-    if (newSet.has(id)) newSet.delete(id);
-    else newSet.add(id);
-    setSelectedDocs(newSet);
-  };
+  // Rename state
+  const [editingPodcastId, setEditingPodcastId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
 
   const handleGenerate = async () => {
-    if (selectedDocs.size === 0) return;
+    if (!selectedDoc) return;
     
     setStatus('generating_script');
     
-    try {
-      // Get the first selected doc for now
-      const docId = Array.from(selectedDocs)[0];
-      const res = await api.post(`documents/${docId}/podcast`, { topic });
-      
-      if (res.data?.success) {
-        const data = res.data.data;
-        setIsModalOpen(false);
-        setStatus('idle');
-        
-        if (data && data.id) {
-          router.push(`/podcast/${data.id}`);
+    generateMutation.mutate(
+      { documentId: selectedDoc, topic },
+      {
+        onSuccess: (data) => {
+          setIsModalOpen(false);
+          setStatus('idle');
+          if (data && data.data && data.data.id) {
+            router.push(`/podcast/${data.data.id}`);
+          }
+        },
+        onError: (error) => {
+          console.error('Error generating podcast:', error);
+          toast.error('Failed to generate podcast');
+          setStatus('idle');
         }
       }
-    } catch (error) {
-      console.error('Error generating podcast:', error);
-      setStatus('idle');
-    }
+    );
   };
 
   const handlePodcastClick = (podcast: any) => {
     if (podcast.status !== 'COMPLETED') return;
     router.push(`/podcast/${podcast.id}`);
+  };
+
+  const handleDelete = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (confirm('Are you sure you want to delete this podcast?')) {
+      deleteMutation.mutate(id, {
+        onSuccess: () => {
+          toast.success('Podcast deleted successfully');
+          if (currentId === id) {
+            router.push('/podcast');
+          }
+        },
+        onError: () => toast.error('Failed to delete podcast'),
+      });
+    }
+  };
+
+  const openRenameDialog = (e: React.MouseEvent, podcast: any) => {
+    e.stopPropagation();
+    setEditingPodcastId(podcast.id);
+    setEditTitle(podcast.title || podcast.document?.title || '');
+  };
+
+  const handleRename = () => {
+    if (!editingPodcastId || !editTitle.trim()) return;
+    
+    updateMutation.mutate(
+      { id: editingPodcastId, data: { title: editTitle.trim() } },
+      {
+        onSuccess: () => {
+          toast.success('Podcast renamed successfully');
+          setEditingPodcastId(null);
+        },
+        onError: () => toast.error('Failed to rename podcast'),
+      }
+    );
   };
 
   return (
@@ -142,20 +179,69 @@ export function PodcastSidebar() {
                   )}
                 </div>
               </div>
+              
+              <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                <DropdownMenu>
+                  <DropdownMenuTrigger render={
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  } />
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={(e) => openRenameDialog(e, podcast)}>
+                      <Pencil className="mr-2 h-4 w-4" /> Rename
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={(e) => handleDelete(e, podcast.id)}
+                      className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           );
         })}
       </div>
+
+      <Dialog open={!!editingPodcastId} onOpenChange={(open) => !open && setEditingPodcastId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename Podcast</DialogTitle>
+            <DialogDescription>
+              Enter a new name for your podcast.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Input 
+              value={editTitle} 
+              onChange={(e) => setEditTitle(e.target.value)} 
+              placeholder="Podcast Title"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleRename();
+              }}
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditingPodcastId(null)}>Cancel</Button>
+            <Button onClick={handleRename} disabled={updateMutation.isPending || !editTitle.trim()}>
+              {updateMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <PodcastSetupModal 
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         topic={topic}
         setTopic={setTopic}
-        collections={collections || []}
         documents={documents || []}
-        selectedDocs={selectedDocs}
-        toggleSelection={toggleSelection}
+        selectedDoc={selectedDoc}
+        setSelectedDoc={setSelectedDoc}
         handleGenerate={handleGenerate}
         status={status}
       />
