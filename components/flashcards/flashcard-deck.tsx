@@ -90,7 +90,7 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         )).reverse()}
       </div>
 
-      <div className="flex gap-8 mt-16 shrink-0 z-20">
+      <div className="flex gap-8 mt-8 sm:mt-12 shrink-0 z-20">
         <Button 
           variant="outline" 
           size="icon" 
