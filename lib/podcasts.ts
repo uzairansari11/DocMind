@@ -19,12 +19,12 @@ export type PodcastItem = {
 };
 
 export async function fetchPodcasts() {
-  const response = await api.get('/podcasts');
+  const response = await api.get('/documents/podcasts');
   return response.data.data as PodcastItem[];
 }
 
 export async function fetchPodcast(id: string) {
-  const response = await api.get(`/podcasts/${id}`);
+  const response = await api.get(`/documents/podcasts/${id}`);
   return response.data.data;
 }
 
@@ -34,11 +34,11 @@ export async function generatePodcast(documentId: string, topic?: string) {
 }
 
 export async function updatePodcast(id: string, data: { title?: string; description?: string }) {
-  const response = await api.patch(`/podcasts/${id}`, data);
+  const response = await api.patch(`/documents/podcasts/${id}`, data);
   return response.data;
 }
 
 export async function deletePodcast(id: string) {
-  const response = await api.delete(`/podcasts/${id}`);
+  const response = await api.delete(`/documents/podcasts/${id}`);
   return response.data;
 }
