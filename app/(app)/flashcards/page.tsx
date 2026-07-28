@@ -1,4 +1,8 @@
+'use client';
+
+import { useState } from 'react';
 import { FlashcardDeck } from '@/components/flashcards/flashcard-deck';
+import { FlashcardSetup } from '@/components/flashcards/flashcard-setup';
 import { SectionShell } from '@/components/workspace/section-shell';
 
 const mockCards = [
@@ -30,13 +34,19 @@ const mockCards = [
 ];
 
 export default function FlashcardsPage() {
+  const [hasGenerated, setHasGenerated] = useState(false);
+
   return (
     <SectionShell
       eyebrow="Study Mode"
       title="Flashcards"
     >
       <div className="w-full flex justify-center py-8">
-        <FlashcardDeck cards={mockCards} />
+        {!hasGenerated ? (
+          <FlashcardSetup onGenerate={() => setHasGenerated(true)} />
+        ) : (
+          <FlashcardDeck cards={mockCards} />
+        )}
       </div>
     </SectionShell>
   );
