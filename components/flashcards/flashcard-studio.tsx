@@ -36,11 +36,8 @@ const mockCards = [
   },
 ];
 
-function FlashcardStudioContent() {
-  const searchParams = useSearchParams();
-  const deckId = searchParams.get('deck');
-  
-  const { data: deckData, isLoading } = useFlashcardSet(deckId !== 'mock' ? deckId : null);
+function FlashcardStudioContent({ deckId }: { deckId?: string }) {
+  const { data: deckData, isLoading } = useFlashcardSet(deckId && deckId !== 'mock' ? deckId : null);
 
   if (deckId === 'mock') {
     return (
@@ -76,10 +73,12 @@ function FlashcardStudioContent() {
   return <FlashcardEmptyState />;
 }
 
-export function FlashcardStudio() {
+export function FlashcardStudio({ deckId }: { deckId?: string }) {
   return (
-    <Suspense fallback={<FlashcardEmptyState />}>
-      <FlashcardStudioContent />
+    <Suspense fallback={
+      <div className="flex-1 flex flex-col bg-card rounded-2xl border border-border/50 shadow-sm overflow-hidden" />
+    }>
+      <FlashcardStudioContent deckId={deckId} />
     </Suspense>
-  );
+  )
 }

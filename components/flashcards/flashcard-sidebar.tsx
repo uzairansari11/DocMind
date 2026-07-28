@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useFlashcardSets } from '@/hooks/use-flashcards';
 import { Loader2, Layers, Plus } from 'lucide-react';
@@ -10,8 +10,8 @@ import { cn } from '@/lib/utils';
 
 function FlashcardSidebarContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentDeck = searchParams.get('deck');
+  const params = useParams();
+  const currentDeck = params.id as string;
   
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,7 +58,7 @@ function FlashcardSidebarContent() {
             {recentDecks.map((deck: any) => (
               <div 
                 key={deck.id}
-                onClick={() => router.push(`/flashcards?deck=${deck.id}`)}
+                onClick={() => router.push(`/flashcards/${deck.id}`)}
                 className={cn(
                   "p-3 rounded-xl border cursor-pointer transition-all duration-200 text-left",
                   currentDeck === deck.id 

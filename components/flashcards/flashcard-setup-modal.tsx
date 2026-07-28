@@ -48,7 +48,7 @@ export function FlashcardSetupModal({ isOpen, setIsOpen }: FlashcardSetupModalPr
         setStatus('idle');
         setIsOpen(false);
         queryClient.invalidateQueries({ queryKey: ['flashcardSets'] });
-        router.push(`/flashcards?deck=${res.data.data.id}`);
+        router.push(`/flashcards/${res.data.data.id}`);
       } else {
         setStatus('idle');
         console.error('Failed to generate flashcards');
