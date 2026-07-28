@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { FlashcardDeck } from './flashcard-deck';
 import { FlashcardEmptyState } from './flashcard-empty-state';
 
-import { useFlashcards } from '@/hooks/use-flashcards';
+import { useFlashcardSet } from '@/hooks/use-flashcards';
 import { Loader2 } from 'lucide-react';
 
 const mockCards = [
@@ -40,7 +40,7 @@ function FlashcardStudioContent() {
   const searchParams = useSearchParams();
   const deckId = searchParams.get('deck');
   
-  const { data: deckData, isLoading } = useFlashcards(deckId !== 'mock' ? deckId : null);
+  const { data: deckData, isLoading } = useFlashcardSet(deckId !== 'mock' ? deckId : null);
 
   if (deckId === 'mock') {
     return (
