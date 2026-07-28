@@ -79,7 +79,7 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         <Progress value={progress} className="h-2" />
       </div>
 
-      <div className="relative w-full h-[450px] max-w-md flex justify-center perspective-[1200px] shrink-0 mt-4">
+      <div className="relative w-full h-[380px] sm:h-[420px] max-w-md flex justify-center perspective-[1200px] shrink-0 mt-4">
         {deck.slice(0, 3).map((card, index) => (
           <Flashcard 
             key={card.id} 

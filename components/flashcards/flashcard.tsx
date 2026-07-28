@@ -40,7 +40,7 @@ export function Flashcard({ card, onSwipe, index }: FlashcardProps) {
   return (
     <motion.div
       className={cn(
-        "absolute w-full h-[450px] max-w-md origin-bottom",
+        "absolute w-full h-[380px] sm:h-[420px] max-w-md origin-bottom",
         isTop ? "cursor-grab active:cursor-grabbing z-10" : "pointer-events-none z-0"
       )}
       style={{ x, rotate, opacity }}
