@@ -40,7 +40,7 @@ export function Flashcard({ card, onSwipe, index }: FlashcardProps) {
   return (
     <motion.div
       className={cn(
-        "absolute w-full h-full max-w-sm origin-bottom",
+        "absolute w-full h-[450px] max-w-md origin-bottom",
         isTop ? "cursor-grab active:cursor-grabbing z-10" : "pointer-events-none z-0"
       )}
       style={{ x, rotate, opacity }}
@@ -60,17 +60,17 @@ export function Flashcard({ card, onSwipe, index }: FlashcardProps) {
         {/* Front */}
         <div 
           className={cn(
-            "absolute inset-0 rounded-3xl p-8 flex flex-col items-center justify-center text-center",
-            "bg-card/80 backdrop-blur-xl border border-border/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)]",
-            "dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
+            "absolute inset-0 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center",
+            "bg-card border border-border/60 shadow-xl",
+            "dark:bg-[#1a1a1a] dark:border-white/10 dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
           )}
           style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
         >
-          <div className="absolute top-6 text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+          <div className="absolute top-8 bg-muted text-muted-foreground px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest">
             Question
           </div>
-          <p className="text-xl sm:text-2xl font-medium text-foreground">{card.front}</p>
-          <div className="absolute bottom-6 text-xs text-muted-foreground animate-pulse">
+          <p className="text-2xl sm:text-3xl font-semibold text-foreground leading-tight">{card.front}</p>
+          <div className="absolute bottom-8 text-xs font-medium text-muted-foreground/60 animate-pulse">
             Tap to flip
           </div>
         </div>
@@ -78,17 +78,17 @@ export function Flashcard({ card, onSwipe, index }: FlashcardProps) {
         {/* Back */}
         <div 
           className={cn(
-            "absolute inset-0 rounded-3xl p-8 flex flex-col items-center justify-center text-center",
-            "bg-primary/5 backdrop-blur-xl border border-primary/20 shadow-[0_8px_30px_rgb(0,0,0,0.12)]",
-            "dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
+            "absolute inset-0 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center",
+            "bg-primary/[0.03] border border-primary/20 shadow-xl",
+            "dark:bg-primary/[0.05] dark:border-primary/30 dark:shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
           )}
           style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <div className="absolute top-6 text-xs font-semibold text-primary uppercase tracking-widest">
+          <div className="absolute top-8 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest">
             Answer
           </div>
-          <p className="text-xl sm:text-2xl font-medium text-primary leading-relaxed overflow-y-auto max-h-[70%] no-scrollbar">{card.back}</p>
-          <div className="absolute bottom-6 flex gap-4 w-full px-4 justify-between text-xs text-muted-foreground">
+          <p className="text-xl sm:text-2xl font-medium text-primary/90 leading-relaxed overflow-y-auto max-h-[60%] no-scrollbar">{card.back}</p>
+          <div className="absolute bottom-8 flex gap-4 w-full px-6 justify-between text-xs font-semibold text-muted-foreground/50">
             <span>← Needs Review</span>
             <span>Got it →</span>
           </div>

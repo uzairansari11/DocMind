@@ -79,7 +79,7 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         <Progress value={progress} className="h-2" />
       </div>
 
-      <div className="relative w-full aspect-[3/4] max-w-sm flex justify-center perspective-[1000px]">
+      <div className="relative w-full h-[450px] max-w-md flex justify-center perspective-[1200px] mt-4">
         {deck.map((card, index) => (
           <Flashcard 
             key={card.id} 
@@ -90,11 +90,11 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         )).reverse()}
       </div>
 
-      <div className="flex gap-6 mt-12">
+      <div className="flex gap-8 mt-16 z-20">
         <Button 
           variant="outline" 
           size="icon" 
-          className="h-16 w-16 rounded-full border-2 border-red-500/20 text-red-500 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-600 transition-colors shadow-sm"
+          className="h-16 w-16 rounded-full border-2 border-red-500/30 text-red-500 bg-background hover:bg-red-500 hover:border-red-500 hover:text-white transition-all shadow-lg hover:shadow-red-500/25 hover:scale-110 active:scale-95"
           onClick={() => handleSwipe('left')}
         >
           <X className="h-8 w-8" />
@@ -102,7 +102,7 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         <Button 
           variant="outline" 
           size="icon" 
-          className="h-16 w-16 rounded-full border-2 border-green-500/20 text-green-500 hover:bg-green-500/10 hover:border-green-500/40 hover:text-green-600 transition-colors shadow-sm"
+          className="h-16 w-16 rounded-full border-2 border-green-500/30 text-green-500 bg-background hover:bg-green-500 hover:border-green-500 hover:text-white transition-all shadow-lg hover:shadow-green-500/25 hover:scale-110 active:scale-95"
           onClick={() => handleSwipe('right')}
         >
           <Check className="h-8 w-8" />
