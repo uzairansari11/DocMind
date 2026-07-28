@@ -1,5 +1,6 @@
 import { FlashcardStudio } from '@/components/flashcards/flashcard-studio';
 
-export default function FlashcardDeckPage({ params }: { params: { id: string } }) {
-  return <FlashcardStudio deckId={params.id} />;
+export default async function FlashcardDeckPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <FlashcardStudio deckId={id} />;
 }
