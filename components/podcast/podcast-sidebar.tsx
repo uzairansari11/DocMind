@@ -9,6 +9,16 @@ import { Play, Loader2, Plus, Headphones, Calendar, Volume2, MoreVertical, Penci
 import { PodcastSetupModal } from '@/components/podcast/podcast-setup-modal';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
@@ -33,6 +43,9 @@ export function PodcastSidebar() {
   // Rename state
   const [editingPodcastId, setEditingPodcastId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
+  
+  // Delete state
+  const [podcastToDelete, setPodcastToDelete] = useState<string | null>(null);
 
   const handleGenerate = async () => {
     if (!selectedDoc) return;
@@ -63,19 +76,23 @@ export function PodcastSidebar() {
     router.push(`/podcast/${podcast.id}`);
   };
 
-  const handleDelete = (e: React.MouseEvent, id: string) => {
+  const openDeleteDialog = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    if (confirm('Are you sure you want to delete this podcast?')) {
-      deleteMutation.mutate(id, {
-        onSuccess: () => {
-          toast.success('Podcast deleted successfully');
-          if (currentId === id) {
-            router.push('/podcast');
-          }
-        },
-        onError: () => toast.error('Failed to delete podcast'),
-      });
-    }
+    setPodcastToDelete(id);
+  };
+
+  const confirmDelete = () => {
+    if (!podcastToDelete) return;
+    deleteMutation.mutate(podcastToDelete, {
+      onSuccess: () => {
+        toast.success('Podcast deleted successfully');
+        if (currentId === podcastToDelete) {
+          router.push('/podcast');
+        }
+        setPodcastToDelete(null);
+      },
+      onError: () => toast.error('Failed to delete podcast'),
+    });
   };
 
   const openRenameDialog = (e: React.MouseEvent, podcast: any) => {
@@ -192,7 +209,7 @@ export function PodcastSidebar() {
                       <Pencil className="mr-2 h-4 w-4" /> Rename
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                      onClick={(e) => handleDelete(e, podcast.id)}
+                      onClick={(e) => openDeleteDialog(e, podcast.id)}
                       className="text-destructive focus:text-destructive focus:bg-destructive/10"
                     >
                       <Trash2 className="mr-2 h-4 w-4" /> Delete
@@ -233,6 +250,29 @@ export function PodcastSidebar() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!podcastToDelete} onOpenChange={(open) => !open && setPodcastToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this podcast
+              and remove its data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteMutation.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDelete} 
+              disabled={deleteMutation.isPending}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <PodcastSetupModal 
         isOpen={isModalOpen}
