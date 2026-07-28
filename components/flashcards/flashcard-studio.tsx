@@ -5,6 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { FlashcardDeck } from './flashcard-deck';
 import { FlashcardEmptyState } from './flashcard-empty-state';
 
+import { useFlashcards } from '@/hooks/use-flashcards';
+import { Loader2 } from 'lucide-react';
+
 const mockCards = [
   {
     id: '1',
@@ -36,11 +39,36 @@ const mockCards = [
 function FlashcardStudioContent() {
   const searchParams = useSearchParams();
   const deckId = searchParams.get('deck');
+  
+  const { data: deckData, isLoading } = useFlashcards(deckId !== 'mock' ? deckId : null);
 
   if (deckId === 'mock') {
     return (
       <div className="w-full flex justify-center py-8 h-full items-center relative z-10">
         <FlashcardDeck cards={mockCards} />
+      </div>
+    );
+  }
+  
+  if (deckId && isLoading) {
+    return (
+      <div className="w-full flex flex-col justify-center py-8 h-full items-center relative z-10 space-y-4">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="text-muted-foreground animate-pulse text-sm">Generating flashcards...</p>
+      </div>
+    );
+  }
+  
+  if (deckId && deckData) {
+    const formattedCards = deckData.flashcards?.map((c: any) => ({
+      id: c.id,
+      front: c.question,
+      back: c.answer
+    })) || [];
+    
+    return (
+      <div className="w-full flex justify-center py-8 h-full items-center relative z-10">
+        <FlashcardDeck cards={formattedCards} />
       </div>
     );
   }

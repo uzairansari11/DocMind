@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { CustomModal } from '@/components/ui/custom-modal';
 import { useCollections } from '@/hooks/use-collections';
 import { useDocuments } from '@/hooks/use-documents';
+import { api } from '@/lib/api';
 
 interface FlashcardSetupModalProps {
   isOpen: boolean;
@@ -31,15 +32,28 @@ export function FlashcardSetupModal({ isOpen, setIsOpen }: FlashcardSetupModalPr
     setSelectedDocs(newSet);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
+    if (selectedDocs.size === 0) return;
+    
     setStatus('generating');
     
-    // Simulate generation delay
-    setTimeout(() => {
+    try {
+      // Get the first selected doc for now
+      const docId = Array.from(selectedDocs)[0];
+      const res = await api.post(`/documents/${docId}/flashcards`, { topic });
+      
+      if (res.data?.success) {
+        setStatus('idle');
+        setIsOpen(false);
+        router.push(`/flashcards?deck=${docId}`);
+      } else {
+        setStatus('idle');
+        console.error('Failed to generate flashcards');
+      }
+    } catch (error) {
+      console.error('Error generating flashcards:', error);
       setStatus('idle');
-      setIsOpen(false);
-      router.push('/flashcards?deck=mock');
-    }, 2000);
+    }
   };
 
   return (
