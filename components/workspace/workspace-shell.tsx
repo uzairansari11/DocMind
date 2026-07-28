@@ -30,7 +30,8 @@ import {
   SquareDashedBottomCode,
   PanelLeftClose,
   PanelLeftOpen,
-  Mic
+  Mic,
+  Layers
 } from 'lucide-react';
 import { Logo } from '@/components/common/logo';
 import Link from 'next/link';
@@ -43,6 +44,7 @@ const navItems = [
   { href: '/podcast',     label: 'Podcast',     icon: Mic },
   { href: '/collections', label: 'Collections', icon: BookOpen },
   { href: '/documents',   label: 'Documents',   icon: FileText },
+  { href: '/flashcards',  label: 'Flashcards',  icon: Layers },
   { href: '/upload',      label: 'Upload',      icon: Upload },
   { href: '/profile',     label: 'Profile',     icon: User },
 ];
