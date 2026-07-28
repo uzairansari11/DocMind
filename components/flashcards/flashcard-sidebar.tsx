@@ -60,14 +60,19 @@ function FlashcardSidebarContent() {
                 key={deck.id}
                 onClick={() => router.push(`/flashcards/${deck.id}`)}
                 className={cn(
-                  "p-3 rounded-xl border cursor-pointer transition-all duration-200 text-left",
+                  "p-3 rounded-xl border cursor-pointer transition-all duration-200 text-left relative",
                   currentDeck === deck.id 
                     ? "bg-primary/10 border-primary/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]" 
                     : "bg-background/50 border-transparent hover:border-border hover:bg-muted/50"
                 )}
               >
-                <h4 className="font-medium text-sm text-foreground line-clamp-1">{deck.title}</h4>
+                <h4 className="font-medium text-sm text-foreground line-clamp-1 pr-12">{deck.title}</h4>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{deck.description}</p>
+                {deck._count?.flashcards !== undefined && (
+                  <div className="absolute top-3 right-3 text-[10px] font-medium bg-foreground/5 text-foreground/70 px-2 py-0.5 rounded-md">
+                    {deck._count.flashcards} cards
+                  </div>
+                )}
               </div>
             ))}
           </div>
