@@ -10,6 +10,7 @@ import { CustomModal } from '@/components/ui/custom-modal';
 import { useCollections } from '@/hooks/use-collections';
 import { useDocuments } from '@/hooks/use-documents';
 import { api } from '@/lib/api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface FlashcardSetupModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface FlashcardSetupModalProps {
 
 export function FlashcardSetupModal({ isOpen, setIsOpen }: FlashcardSetupModalProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: collections } = useCollections();
   const { data: documents } = useDocuments();
   
@@ -45,7 +47,8 @@ export function FlashcardSetupModal({ isOpen, setIsOpen }: FlashcardSetupModalPr
       if (res.data?.success) {
         setStatus('idle');
         setIsOpen(false);
-        router.push(`/flashcards?deck=${docId}`);
+        queryClient.invalidateQueries({ queryKey: ['flashcardSets'] });
+        router.push(`/flashcards?deck=${res.data.data.id}`);
       } else {
         setStatus('idle');
         console.error('Failed to generate flashcards');

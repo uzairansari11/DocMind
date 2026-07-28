@@ -5,7 +5,7 @@ export function useFlashcardSets() {
   return useQuery({
     queryKey: ['flashcardSets'],
     queryFn: async () => {
-      const response = await api.get(`/flashcards`);
+      const response = await api.get(`/documents/flashcards`);
       return response.data?.data || [];
     },
   });
@@ -16,7 +16,7 @@ export function useFlashcardSet(flashcardSetId: string | null) {
     queryKey: ['flashcardSet', flashcardSetId],
     queryFn: async () => {
       if (!flashcardSetId) return null;
-      const response = await api.get(`/flashcards/${flashcardSetId}`);
+      const response = await api.get(`/documents/flashcards/${flashcardSetId}`);
       return response.data?.data || null;
     },
     enabled: !!flashcardSetId,
