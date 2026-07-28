@@ -77,15 +77,15 @@ export function DocumentUploaderModal({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6 pt-2">
-            <div className="space-y-1.5 flex flex-col">
+          <div className="space-y-6 pt-2 min-w-0 w-full">
+            <div className="space-y-1.5 flex flex-col min-w-0">
               <label htmlFor="collection" className="block text-sm font-medium text-foreground">
                 Target Collection
               </label>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger
                   disabled={!!defaultCollectionId || isLoadingCollections}
-                  className="inline-flex items-center justify-between whitespace-nowrap w-full h-11 rounded-xl border border-border bg-background px-4 text-sm font-normal shadow-sm hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center justify-between w-full h-11 rounded-xl border border-border bg-background px-4 text-sm font-normal shadow-sm hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50 min-w-0"
                 >
                   <span className="truncate flex-1 text-left">
                     {selectedCollectionId
