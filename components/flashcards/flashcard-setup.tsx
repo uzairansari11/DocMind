@@ -29,26 +29,26 @@ export function FlashcardSetup({ onGenerate }: { onGenerate: (collectionId: stri
     <motion.div 
       key="setup"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="w-full max-w-2xl mx-auto flex flex-col items-center justify-center p-8 text-center"
+      className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-background to-muted/10"
     >
-      <div className="relative mb-8">
+      <div className="relative mb-6">
         <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-        <div className="h-24 w-24 bg-card rounded-full flex items-center justify-center border border-primary/20 shadow-xl relative z-10">
-          <Layers className="h-10 w-10 text-primary drop-shadow-sm" />
+        <div className="h-20 w-20 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center border border-primary/20 shadow-xl relative z-10 backdrop-blur-md">
+          <Layers className="h-8 w-8 text-primary drop-shadow-sm" />
         </div>
       </div>
       
-      <h2 className="text-3xl font-bold tracking-tight mb-3">Generate Flashcards</h2>
-      <p className="text-muted-foreground max-w-md text-base mb-10">
-        Select a collection of documents to instantly generate an interactive flashcard deck for studying.
+      <h2 className="text-2xl font-bold tracking-tight mb-2">Welcome to Study Mode</h2>
+      <p className="text-muted-foreground max-w-sm text-base mb-8">
+        Select a collection of documents to instantly generate an interactive flashcard deck.
       </p>
 
       <div className="w-full max-w-sm space-y-6">
         <div className="space-y-3 text-left">
-          <label className="text-sm font-semibold text-foreground ml-1">
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-1">
             Source Collection
           </label>
-          <div className="grid gap-2 max-h-[300px] overflow-y-auto pr-2 no-scrollbar">
+          <div className="grid gap-2 max-h-[250px] overflow-y-auto pr-2 no-scrollbar">
             {isLoading ? (
               <div className="flex items-center justify-center p-8 text-muted-foreground">
                 <Loader2 className="h-6 w-6 animate-spin" />
@@ -87,10 +87,10 @@ export function FlashcardSetup({ onGenerate }: { onGenerate: (collectionId: stri
           {isGenerating ? (
             <>
               <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Analyzing documents...
+              Generating Deck...
             </>
           ) : (
-            'Generate Deck'
+            'Generate Flashcards'
           )}
         </Button>
       </div>

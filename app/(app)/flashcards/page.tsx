@@ -36,17 +36,17 @@ const mockCards = [
 export default function FlashcardsPage() {
   const [hasGenerated, setHasGenerated] = useState(false);
 
+  if (!hasGenerated) {
+    return <FlashcardSetup onGenerate={() => setHasGenerated(true)} />;
+  }
+
   return (
     <SectionShell
       eyebrow="Study Mode"
       title="Flashcards"
     >
       <div className="w-full flex justify-center py-8">
-        {!hasGenerated ? (
-          <FlashcardSetup onGenerate={() => setHasGenerated(true)} />
-        ) : (
-          <FlashcardDeck cards={mockCards} />
-        )}
+        <FlashcardDeck cards={mockCards} />
       </div>
     </SectionShell>
   );
