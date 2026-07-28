@@ -27,8 +27,8 @@ export function useCreateCollection() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createCollectionRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['collections'] });
     },
     onError: (error: any) => {
       toast.error(error?.message || 'Failed to create collection');
@@ -40,9 +40,11 @@ export function useUpdateCollection() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateCollectionRequest,
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-      queryClient.invalidateQueries({ queryKey: ['collections', variables.id] });
+    onSuccess: async (_, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['collections'] }),
+        queryClient.invalidateQueries({ queryKey: ['collections', variables.id] }),
+      ]);
     },
     onError: (error: any) => {
       toast.error(error?.message || 'Failed to update collection');
@@ -54,8 +56,8 @@ export function useDeleteCollection() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteCollectionRequest,
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
+    onSuccess: async (_, id) => {
+      await queryClient.invalidateQueries({ queryKey: ['collections'] });
       queryClient.removeQueries({ queryKey: ['collections', id] });
     },
     onError: (error: any) => {

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { uploadDocumentRequest } from '@/lib/documents';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Loader2, UploadCloud, X, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function DocumentUploader({ collectionId, onUploadComplete }: { collectionId: string, onUploadComplete: () => void }) {
   const [file, setFile] = useState<File | null>(null);
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: () => {
@@ -18,7 +19,11 @@ export function DocumentUploader({ collectionId, onUploadComplete }: { collectio
         document: file,
       });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['documents'] }),
+        queryClient.invalidateQueries({ queryKey: ['collections'] }),
+      ]);
       toast.success('Document uploaded successfully');
       setFile(null);
       onUploadComplete();

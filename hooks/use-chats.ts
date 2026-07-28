@@ -28,8 +28,8 @@ export function useCreateChat() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createChatRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['chats'] });
     },
     onError: (error: any) => {
       toast.error(error?.message || 'Failed to create chat');
@@ -42,9 +42,11 @@ export function useUpdateChat() {
   return useMutation({
     mutationFn: ({ chatId, payload }: { chatId: string; payload: { title?: string; isPinned?: boolean } }) =>
       updateChatRequest(chatId, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
-      queryClient.invalidateQueries({ queryKey: ['chats', variables.chatId] });
+    onSuccess: async (_, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['chats'] }),
+        queryClient.invalidateQueries({ queryKey: ['chats', variables.chatId] }),
+      ]);
     },
     onError: (error: any) => {
       toast.error(error?.message || 'Failed to update chat');
@@ -56,8 +58,8 @@ export function useDeleteChat() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteChatRequest,
-    onSuccess: (_, chatId) => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
+    onSuccess: async (_, chatId) => {
+      await queryClient.invalidateQueries({ queryKey: ['chats'] });
       queryClient.removeQueries({ queryKey: ['chats', chatId] });
     },
     onError: (error: any) => {

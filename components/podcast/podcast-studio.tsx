@@ -7,6 +7,7 @@ import { useDocuments } from '@/hooks/use-documents';
 import { usePodcasts } from '@/hooks/use-podcasts';
 import { Play, Loader2, Plus, Headphones, Calendar, Volume2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';
 import { fetchProxyUrl } from '@/app/actions';
@@ -22,6 +23,7 @@ export function PodcastStudio() {
   const { data: collections } = useCollections();
   const { data: documents } = useDocuments();
   const { data: podcasts, isLoading: isLoadingPodcasts, error: podcastsError } = usePodcasts();
+  const queryClient = useQueryClient();
   
   const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
   const [topic, setTopic] = useState('');
@@ -58,6 +60,7 @@ export function PodcastStudio() {
       const res = await api.post(`documents/${docId}/podcast`, { topic });
       
       if (res.data?.success) {
+        queryClient.invalidateQueries({ queryKey: ['podcasts'] });
         let data = res.data.data;
         
         // Calculate realistic durations based on actual text length so everything is perfectly synced

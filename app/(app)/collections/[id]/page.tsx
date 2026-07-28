@@ -48,8 +48,8 @@ export default function CollectionDetailsPage() {
 
   const { mutate: update, isPending: isUpdating } = useMutation({
     mutationFn: (title: string) => updateCollectionRequest({ id, payload: { title } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['collections'] });
       toast.success('Collection updated');
       setIsEditing(false);
     },
@@ -60,8 +60,8 @@ export default function CollectionDetailsPage() {
 
   const { mutate: remove, isPending: isDeleting } = useMutation({
     mutationFn: () => deleteCollectionRequest(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['collections'] });
       toast.success('Collection deleted');
       router.push('/collections');
     },

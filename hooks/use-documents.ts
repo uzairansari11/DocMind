@@ -13,9 +13,11 @@ export function useUploadDocument() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: uploadDocumentRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['documents'] });
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['documents'] }),
+        queryClient.invalidateQueries({ queryKey: ['collections'] }),
+      ]);
     },
     onError: (error: any) => {
       toast.error(error?.message || 'Failed to upload document');
