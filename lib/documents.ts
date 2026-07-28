@@ -49,3 +49,18 @@ export async function uploadDocumentRequest(payload: {
 
   return response.data.data as DocumentPreview;
 }
+
+export async function fetchDocument(documentId: string) {
+  const response = await api.get(`/documents/${documentId}`);
+  return response.data.data as DocumentDetail;
+}
+
+export async function updateDocument({ id, title }: { id: string; title: string }) {
+  const response = await api.patch(`/documents/${id}`, { title });
+  return response.data.data as DocumentDetail;
+}
+
+export async function deleteDocument(documentId: string) {
+  const response = await api.delete(`/documents/${documentId}`);
+  return response.data;
+}
