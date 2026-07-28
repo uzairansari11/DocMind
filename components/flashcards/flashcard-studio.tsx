@@ -64,7 +64,13 @@ function FlashcardStudioContent({ deckId }: { deckId?: string }) {
     })) || [];
     
     return (
-      <div className="w-full flex justify-center py-8 h-full items-center relative z-10">
+      <div className="w-full flex flex-col items-center py-8 h-full relative z-10 space-y-8">
+        <div className="text-center space-y-2 max-w-2xl px-6">
+          <h2 className="text-3xl font-bold tracking-tight">{deckData.title}</h2>
+          {deckData.description && (
+            <p className="text-muted-foreground">{deckData.description}</p>
+          )}
+        </div>
         <FlashcardDeck cards={formattedCards} />
       </div>
     );
