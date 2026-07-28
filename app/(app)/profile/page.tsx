@@ -130,12 +130,7 @@ export default function ProfilePage() {
             </p>
           </div>
           
-          <div className="flex gap-2 pt-2">
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary/50 px-3 py-1 text-xs font-medium text-secondary-foreground border border-border/50">
-              <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-              Free Plan
-            </div>
-          </div>
+
         </div>
 
         {/* Main Details Form */}
@@ -174,7 +169,7 @@ export default function ProfilePage() {
                 className="h-10 rounded-xl border-border/50 bg-background/50 focus-visible:ring-primary/20 disabled:opacity-70 disabled:bg-muted/40 transition-all duration-300" 
               />
             </div>
-            <div className="flex flex-col gap-1.5 sm:col-span-2 group">
+            <div className="flex flex-col gap-1.5 group">
               <label className="text-sm font-medium text-foreground/80 group-focus-within:text-primary transition-colors">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -184,7 +179,17 @@ export default function ProfilePage() {
                   className="pl-9 h-10 rounded-xl border-border/50 bg-background/50 disabled:opacity-70 disabled:bg-muted/40 transition-all duration-300" 
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-1.5 ml-1">Email cannot be changed at this time.</p>
+            </div>
+            <div className="flex flex-col gap-1.5 group">
+              <label className="text-sm font-medium text-foreground/80 group-focus-within:text-primary transition-colors">Account Role</label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  value={profile?.role ?? 'User'} 
+                  disabled 
+                  className="pl-9 h-10 rounded-xl border-border/50 bg-background/50 disabled:opacity-70 disabled:bg-muted/40 transition-all duration-300 capitalize" 
+                />
+              </div>
             </div>
           </div>
 
