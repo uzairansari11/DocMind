@@ -70,8 +70,8 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
   const progress = ((cards.length - deck.length) / cards.length) * 100;
 
   return (
-    <div className="flex flex-col items-center max-w-lg mx-auto w-full h-[80vh] justify-center">
-      <div className="w-full mb-8 space-y-2 px-4">
+    <div className="flex flex-col items-center max-w-lg mx-auto w-full flex-1 justify-center py-4">
+      <div className="w-full mb-6 space-y-2 px-4 shrink-0">
         <div className="flex justify-between text-sm font-medium text-muted-foreground">
           <span>{deck.length} remaining</span>
           <span>{known.length + learning.length} / {cards.length}</span>
@@ -79,8 +79,8 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         <Progress value={progress} className="h-2" />
       </div>
 
-      <div className="relative w-full h-[450px] max-w-md flex justify-center perspective-[1200px] mt-4">
-        {deck.map((card, index) => (
+      <div className="relative w-full h-[400px] sm:h-[450px] max-w-md flex justify-center perspective-[1200px] shrink-0 mt-4">
+        {deck.slice(0, 3).map((card, index) => (
           <Flashcard 
             key={card.id} 
             card={card} 
@@ -90,22 +90,22 @@ export function FlashcardDeck({ cards }: FlashcardDeckProps) {
         )).reverse()}
       </div>
 
-      <div className="flex gap-8 mt-16 z-20">
+      <div className="flex gap-8 mt-10 shrink-0 z-20">
         <Button 
           variant="outline" 
           size="icon" 
-          className="h-16 w-16 rounded-full border-2 border-red-500/30 text-red-500 bg-background hover:bg-red-500 hover:border-red-500 hover:text-white transition-all shadow-lg hover:shadow-red-500/25 hover:scale-110 active:scale-95"
+          className="h-14 w-14 sm:h-16 sm:w-16 rounded-full border-2 border-red-500/30 text-red-500 bg-background hover:bg-red-500 hover:border-red-500 hover:text-white transition-all shadow-lg hover:shadow-red-500/25 hover:scale-110 active:scale-95"
           onClick={() => handleSwipe('left')}
         >
-          <X className="h-8 w-8" />
+          <X className="h-6 w-6 sm:h-8 sm:w-8" />
         </Button>
         <Button 
           variant="outline" 
           size="icon" 
-          className="h-16 w-16 rounded-full border-2 border-green-500/30 text-green-500 bg-background hover:bg-green-500 hover:border-green-500 hover:text-white transition-all shadow-lg hover:shadow-green-500/25 hover:scale-110 active:scale-95"
+          className="h-14 w-14 sm:h-16 sm:w-16 rounded-full border-2 border-green-500/30 text-green-500 bg-background hover:bg-green-500 hover:border-green-500 hover:text-white transition-all shadow-lg hover:shadow-green-500/25 hover:scale-110 active:scale-95"
           onClick={() => handleSwipe('right')}
         >
-          <Check className="h-8 w-8" />
+          <Check className="h-6 w-6 sm:h-8 sm:w-8" />
         </Button>
       </div>
     </div>
