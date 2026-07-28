@@ -49,7 +49,10 @@ export default function CollectionDetailsPage() {
   const { mutate: update, isPending: isUpdating } = useMutation({
     mutationFn: (title: string) => updateCollectionRequest({ id, payload: { title } }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['collections'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['collections'] }),
+        queryClient.invalidateQueries({ queryKey: ['collection', id] })
+      ]);
       toast.success('Collection updated');
       setIsEditing(false);
     },
